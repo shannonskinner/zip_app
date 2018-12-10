@@ -3,17 +3,26 @@
 
 import pandas as pd
 import numpy as np
+from urllib.request import Request, urlopen
 import json
 
 
 # bring in data from Census sources
 def main(zipcode):
     input_zip=zipcode
-    zips = pd.read_csv('https://www2.census.gov/geo/docs/maps-data/data/rel/zcta_county_rel_10.txt', dtype={'ZCTA5': str, 'STATE': str, 'COUNTY':str, 'GEOID':str}) #read census data for zipcodes & state / county
+    header = {'User-Agent': 'Mozilla/5.0'}
     
-    counties = pd.read_csv('https://www2.census.gov/geo/docs/reference/codes/files/national_county.txt', header=None, names=['STATE','STATEFP', 'COUNTYFP', 'COUNTYNAME', 'CLASSFP'], dtype={'STATEFP': str, 'COUNTYFP':str, 'GEOID':str}) #read list of counties
+    zip_req = Request('https://www2.census.gov/geo/docs/maps-data/data/rel/zcta_county_rel_10.txt', headers=header )    
+    zip_req2 = urlopen(zip_req)
+    zips = pd.read_csv(zip_req2,  dtype={'ZCTA5': str, 'STATE': str, 'COUNTY':str, 'GEOID':str}) #read census data for zipcodes & state / county
     
-    place_zip = pd.read_csv('https://www2.census.gov/geo/docs/maps-data/data/rel/zcta_place_rel_10.txt', dtype={'ZCTA5': str, 'STATE': str, 'PLACE':str, 'GEOID':str})
+    count_req = Request('https://www2.census.gov/geo/docs/reference/codes/files/national_county.txt', headers=header )    
+    count_req2 = urlopen(count_req)
+    counties = pd.read_csv(count_req2, header=None, names=['STATE','STATEFP', 'COUNTYFP', 'COUNTYNAME', 'CLASSFP'], dtype={'STATEFP': str, 'COUNTYFP':str, 'GEOID':str}) #read list of counties
+    
+    place_req = Request('https://www2.census.gov/geo/docs/maps-data/data/rel/zcta_place_rel_10.txt', headers=header )    
+    place_req2 = urlopen(place_req)
+    place_zip = pd.read_csv(place_req2, dtype={'ZCTA5': str, 'STATE': str, 'PLACE':str, 'GEOID':str})
     places = pd.read_csv('https://www2.census.gov/geo/docs/reference/codes/files/national_places.txt', 
                      encoding='latin-1', sep='|', 
                      header=0, names=['STATE','STATEFP', 'PLACEFP', 'PLACENAME', 'TYPE', 'FUNCSTAT', 'COUNTY'], 
