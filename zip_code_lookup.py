@@ -4,13 +4,14 @@
 import pandas as pd
 import numpy as np
 from urllib.request import Request, urlopen
+import urllib.request
 import json
 
 
 # bring in data from Census sources
 def main(zipcode):
     input_zip=zipcode
-    header = {'User-Agent': 'Mozilla/5.0'}
+    header = {'User-Agent': 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.3'}
     
     zip_req = Request('https://www2.census.gov/geo/docs/maps-data/data/rel/zcta_county_rel_10.txt', headers=header )    
     zip_req2 = urlopen(zip_req)
