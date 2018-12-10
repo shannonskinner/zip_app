@@ -30,7 +30,7 @@ def main(zipcode):
     city_output = places[(places['PLACEFP']==place_id)& (places['STATE']==state_output)]['PLACENAME'].values[0]
     
     output = [{'zipcode': zipcode, 'county_output': county_output, 'state_output': state_output, 'city_output': city_output}]
-    with open('output.json', 'w') as f:
+    with open('static/output.json', 'w') as f:
         json.dump(output, f)
     
 

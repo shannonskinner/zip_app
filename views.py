@@ -33,15 +33,15 @@ def upload():
             response=zip_code_lookup.main(zipcode)
             return redirect(url_for('script', zipcode=zipcode))
     else: 
-        with open('output.json') as f: 
+        with open('static/output.json') as f: 
             data = json.load(f)
         zipcode=data[0]['zipcode']
         county_output = data[0]['county_output']
         state_output = data[0]['state_output']
         city_output = data[0]['city_output']
-        #output = [{'zipcode': 'ENTER ZIPCODE', 'county_output': 'ENTER ZIPCODE', 'state_output': 'ENTER ZIPCODE', 'city_output': 'ENTER ZIPCODE'}]
-        #with open('output.json', 'w') as f:
-        #    json.dump(output, f)
+        output = [{'zipcode': 'ENTER ZIPCODE', 'county_output': 'ENTER ZIPCODE', 'state_output': 'ENTER ZIPCODE', 'city_output': 'ENTER ZIPCODE'}]
+        with open('static/output.json', 'w') as f:
+            json.dump(output, f)
     return render_template('zip_app.html', zipcode=zipcode, county_output=county_output, state_output=state_output, city_output=city_output)
 
 @app.route('/run_script')
