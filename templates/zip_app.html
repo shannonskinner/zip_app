@@ -1,0 +1,48 @@
+{% extends "bootstrap/base.html" %}
+{% block title %}
+Zip Code Lookup App
+{% endblock %}
+
+{% block content %}   
+<br>
+<div class="container">
+    <h1>Zip Code Lookup App</h1>
+    <p class="lead">Hi! Welcome to the <strong>Zip Code Lookup App</strong>. In order to use this app, you'll take the following steps: 
+        <ol>
+            <li>Enter your zipcode below </li>
+            <li>The app will look up your zip code and tell you your state & county, based on census data.</li>
+        </ol>
+</div>
+
+
+<div class="container">
+    <div class="row">
+        <h2>Enter your zipcode</h2>
+    </div>
+    <div class="blockquote">
+    <p>Enter your zipcode below. </p>
+    </div>
+    <form method=post enctype=multipart/form-data>
+        <div class="form-group">
+            <label for="zipcode">What is the zipcode you'd like to lookup?</label> 
+            <input type=text name=zipcode class="form-control" placeholder="10001">
+        </div>
+        <div class="row justify-content-start"> 
+            <button class="btn btn-lg btn-success" type=submit value=Upload style="margin-top:40px; margin-right:12px">Look up State & County</button>
+        </div>      
+    </form><br>
+    <div class="row">
+    <h2>Your Results:</h2>
+    </div>
+    <div class="row">
+        <p class="lead">The zipcode <mark>{{zipcode}}</mark> is in <mark>{{city_output}}</mark> in <mark>{{county_output}}</mark> in the state of <mark>{{state_output}}</mark>. </p>
+        <br>   
+    </div>
+</div><br><br>
+
+
+{% endblock %}
+{% block scripts %}
+{{ super() }}
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
+{% endblock %}
