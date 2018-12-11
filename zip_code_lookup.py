@@ -18,15 +18,18 @@ def main(zipcode):
     
     zip_url = 'https://www2.census.gov/geo/docs/maps-data/data/rel/zcta_county_rel_10.txt'  
     zip_req = Request (url=zip_url, headers=header)
-    zips = pd.read_csv(io.StringIO(zip_req.decode('utf-8')),  dtype={'ZCTA5': str, 'STATE': str, 'COUNTY':str, 'GEOID':str}) #read census data for zipcodes & state / county
+    zip_html = urlopen(zip_req).read()
+    zips = pd.read_csv(io.StringIO(zip_html.decode('utf-8')),  dtype={'ZCTA5': str, 'STATE': str, 'COUNTY':str, 'GEOID':str}) #read census data for zipcodes & state / county
     
     count_url = 'https://www2.census.gov/geo/docs/reference/codes/files/national_county.txt' 
     count_req = Request(url=count_url, headers=header)
-    counties = pd.read_csv(io.StringIO(count_req.decode('utf-8')), header=None, names=['STATE','STATEFP', 'COUNTYFP', 'COUNTYNAME', 'CLASSFP'], dtype={'STATEFP': str, 'COUNTYFP':str, 'GEOID':str}) #read list of counties
+    count_html = urlopen(count_req).read()
+    counties = pd.read_csv(io.StringIO(count_html.decode('utf-8')), header=None, names=['STATE','STATEFP', 'COUNTYFP', 'COUNTYNAME', 'CLASSFP'], dtype={'STATEFP': str, 'COUNTYFP':str, 'GEOID':str}) #read list of counties
     
     place_url = 'https://www2.census.gov/geo/docs/maps-data/data/rel/zcta_place_rel_10.txt'
     place_req = Request(url=place_url, headers=header)
-    place_zip = pd.read_csv(io.StringIO(place_req.decode('utf-8')), dtype={'ZCTA5': str, 'STATE': str, 'PLACE':str, 'GEOID':str})
+    place_html = urlopen(place_req).read()
+    place_zip = pd.read_csv(io.StringIO(place_html.decode('utf-8')), dtype={'ZCTA5': str, 'STATE': str, 'PLACE':str, 'GEOID':str})
     places = pd.read_csv('https://www2.census.gov/geo/docs/reference/codes/files/national_places.txt', 
                      encoding='latin-1', sep='|', 
                      header=0, names=['STATE','STATEFP', 'PLACEFP', 'PLACENAME', 'TYPE', 'FUNCSTAT', 'COUNTY'], 
