@@ -10,9 +10,7 @@ import json
 import io
 
 
-# bring in data from Census sources
-def main(zipcode):
-    input_zip=zipcode
+def downloadData(): 
     header = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.110 Safari/537.36'}
     #ua=UserAgent()
     
@@ -25,6 +23,8 @@ def main(zipcode):
     count_req = Request(url=count_url, headers=header)
     count_html = urlopen(count_req).read()
     counties = pd.read_csv(io.StringIO(count_html.decode('utf-8')), header=None, names=['STATE','STATEFP', 'COUNTYFP', 'COUNTYNAME', 'CLASSFP'], dtype={'STATEFP': str, 'COUNTYFP':str, 'GEOID':str}) #read list of counties
+    counties['GEOID'] = counties.STATEFP.map(str)+counties.COUNTYFP.map(str)
+    counties = counties[['STATE', 'GEOID', 'STATEFP', 'COUNTYFP', 'COUNTYNAME', 'CLASSFP']]
     
     place_url = 'https://www2.census.gov/geo/docs/maps-data/data/rel/zcta_place_rel_10.txt'
     place_req = Request(url=place_url, headers=header)
@@ -34,15 +34,26 @@ def main(zipcode):
     places_url = 'https://www2.census.gov/geo/docs/reference/codes/files/national_places.txt'
     places_req = Request(url=places_url, headers=header)
     places_html = urlopen(places_req).read()
-    places = pd.read_csv('https://www2.census.gov/geo/docs/reference/codes/files/national_places.txt',
+    places = pd.read_csv(io.StringIO(places_html.decode('utf-8')),
                      encoding='latin-1', sep='|', 
                      header=0, names=['STATE','STATEFP', 'PLACEFP', 'PLACENAME', 'TYPE', 'FUNCSTAT', 'COUNTY'], 
                      dtype={'STATEFP': str, 'PLACEFP':str})#import places list
     places['PLACE_NAME'] = places['PLACENAME'].str.rsplit(' ', n=1, expand=True)[0]
     places['PLACE_TYPE'] = places['PLACENAME'].str.rsplit(' ', n=1, expand=True)[1]
+    zips.to_csv('static/zips.csv', index=False)
+    counties.to_csv('static/counties.csv', index=False)
+    place_zip.to_csv('static/place_zip.csv', index=False)
+    places.to_csv('static/places.csv', index=False)
     
-    counties['GEOID'] = counties.STATEFP.map(str)+counties.COUNTYFP.map(str)
-    counties = counties[['STATE', 'GEOID', 'STATEFP', 'COUNTYFP', 'COUNTYNAME', 'CLASSFP']]
+
+# bring in data from Census sources
+def main(zipcode):
+    input_zip=zipcode
+    
+    zips = pd.read_csv('static/zips.csv')
+    counties = pd.read_csv('static/counties.csv')
+    place_zip = pd.read_csv('static/place_zip.csv')
+    places = pd.read_csv('static/places.csv')
     
     input_geoid = str(zips[zips['ZCTA5']==input_zip]['GEOID'].values[0])
     county_output = counties.COUNTYNAME[counties.GEOID==str(zips[zips['ZCTA5']==input_zip]['GEOID'].values[0])].values[0]
