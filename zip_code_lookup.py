@@ -13,7 +13,7 @@ import io
 # bring in data from Census sources
 def main(zipcode):
     input_zip=zipcode
-    header = {'User-Agent': 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.3'}
+    header = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.110 Safari/537.36'}
     #ua=UserAgent()
     
     zip_url = 'https://www2.census.gov/geo/docs/maps-data/data/rel/zcta_county_rel_10.txt'  
