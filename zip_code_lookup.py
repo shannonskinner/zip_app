@@ -3,9 +3,9 @@
 
 import pandas as pd
 import numpy as np
-from urllib3.request import Request, urlopen
+from urllib.request import Request, urlopen
 #from fake_useragent import UserAgent
-import urllib3.request
+import urllib.request
 import json
 import io
 
