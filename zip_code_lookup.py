@@ -50,11 +50,11 @@ def downloadData():
 def main(zipcode):
     input_zip=zipcode
     
-    zips = pd.read_csv('static/zips.csv')
-    counties = pd.read_csv('static/counties.csv')
-    place_zip = pd.read_csv('static/place_zip.csv')
-    places = pd.read_csv('static/places.csv')
-    
+    zips = pd.read_csv('static/zips.csv',  dtype={'ZCTA5': str, 'STATE': str, 'COUNTY':str, 'GEOID':str})
+    counties = pd.read_csv('static/counties.csv', dtype={'STATEFP': str, 'COUNTYFP':str, 'GEOID':str})
+    place_zip = pd.read_csv('static/place_zip.csv', dtype={'ZCTA5': str, 'STATE': str, 'PLACE':str, 'GEOID':str})
+    places = pd.read_csv('static/places.csv', dtype={'STATEFP': str, 'PLACEFP':str})
+
     input_geoid = str(zips[zips['ZCTA5']==input_zip]['GEOID'].values[0])
     county_output = counties.COUNTYNAME[counties.GEOID==str(zips[zips['ZCTA5']==input_zip]['GEOID'].values[0])].values[0]
     state_output = counties.STATE[counties.GEOID==str(zips[zips['ZCTA5']==input_zip]['GEOID'].values[0])].values[0]
