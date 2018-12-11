@@ -34,7 +34,8 @@ def main(zipcode):
                      encoding='latin-1', sep='|', 
                      header=0, names=['STATE','STATEFP', 'PLACEFP', 'PLACENAME', 'TYPE', 'FUNCSTAT', 'COUNTY'], 
                      dtype={'STATEFP': str, 'PLACEFP':str})#import places list
-    
+    places['PLACE_NAME'] = places['PLACENAME'].str.rsplit(' ', n=1, expand=True)[0]
+    places['PLACE_TYPE'] = places['PLACENAME'].str.rsplit(' ', n=1, expand=True)[1]
     
     counties['GEOID'] = counties.STATEFP.map(str)+counties.COUNTYFP.map(str)
     counties = counties[['STATE', 'GEOID', 'STATEFP', 'COUNTYFP', 'COUNTYNAME', 'CLASSFP']]
@@ -43,9 +44,10 @@ def main(zipcode):
     county_output = counties.COUNTYNAME[counties.GEOID==str(zips[zips['ZCTA5']==input_zip]['GEOID'].values[0])].values[0]
     state_output = counties.STATE[counties.GEOID==str(zips[zips['ZCTA5']==input_zip]['GEOID'].values[0])].values[0]
     place_id = place_zip[place_zip['ZCTA5']==zipcode]['PLACE'].values[0]
-    city_output = places[(places['PLACEFP']==place_id)& (places['STATE']==state_output)]['PLACENAME'].values[0]
+    city_output = places[(places['PLACEFP']==place_id)& (places['STATE']==state_output)]['PLACE_NAME'].values[0]
+    place_type = places[(places['PLACEFP']==place_id) & (places['STATE']==state_output)]['PLACE_TYPE'].values[0]
     
-    output = [{'zipcode': zipcode, 'county_output': county_output, 'state_output': state_output, 'city_output': city_output}]
+    output = [{'zipcode': zipcode, 'county_output': county_output, 'state_output': state_output, 'city_output': city_output, 'place_type': place_type}]
     with open('static/output.json', 'w') as f:
         json.dump(output, f)
     

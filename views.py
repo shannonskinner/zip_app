@@ -39,10 +39,11 @@ def upload():
         county_output = data[0]['county_output']
         state_output = data[0]['state_output']
         city_output = data[0]['city_output']
-        output = [{'zipcode': 'ENTER ZIPCODE', 'county_output': 'ENTER ZIPCODE', 'state_output': 'ENTER ZIPCODE', 'city_output': 'ENTER ZIPCODE'}]
+        place_type = data[0]['place_type']
+        output = [{'zipcode': 'ENTER ZIPCODE', 'county_output': 'ENTER ZIPCODE', 'state_output': 'ENTER ZIPCODE', 'city_output': 'ENTER ZIPCODE', 'place_type': 'ENTER ZIPCODE'}]
         with open('static/output.json', 'w') as f:
             json.dump(output, f)
-    return render_template('zip_app.html', zipcode=zipcode, county_output=county_output, state_output=state_output, city_output=city_output)
+    return render_template('zip_app.html', zipcode=zipcode, county_output=county_output, state_output=state_output, city_output=city_output, place_type=place_type)
 
 @app.route('/run_script')
 def script(): 
