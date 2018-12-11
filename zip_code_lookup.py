@@ -34,7 +34,7 @@ def main(zipcode):
     places_url = 'https://www2.census.gov/geo/docs/reference/codes/files/national_places.txt'
     places_req = Request(url=places_url, headers=header)
     places_html = urlopen(places_req).read()
-    places = pd.read_csv(io.StringIO(places_html.decode('latin-1')),
+    places = pd.read_csv('https://www2.census.gov/geo/docs/reference/codes/files/national_places.txt',
                      encoding='latin-1', sep='|', 
                      header=0, names=['STATE','STATEFP', 'PLACEFP', 'PLACENAME', 'TYPE', 'FUNCSTAT', 'COUNTY'], 
                      dtype={'STATEFP': str, 'PLACEFP':str})#import places list
